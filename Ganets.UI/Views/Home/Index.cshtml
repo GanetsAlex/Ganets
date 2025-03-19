@@ -1,19 +1,28 @@
-﻿@{ 
-    ViewBag.Title = "Index"; 
+﻿@{
+    ViewData["Title"] = "Index page";
+
+    var lst = ViewData["Lst"] as SelectList;
 } 
 
-    <h1>Лабораторная работа 1</h1>
-    <h2>Список</h2>
-        <ol type="A">
-            <li>элемент 0 списка</li>
-            <li>элемент 1 списка</li>
-            <li>элемент 2 списка</li>
-            <li>элемент 3 списка</li>
-            <li>элемент 4 списка</li>
+<h1>@ViewData["Message"]</h1>
+<h2>Список</h2>
+<ol type="A">
+    @for (int i=0;i<5;i++)
+    {
+        <li>Элемент @i списка</li>
+    }
         </ol>
     <hr></hr>
     <h2>Форма</h2>
         <form method="post" action="#">
+            <div class="form-group row mb-3">
+                <div class="col-sm-2"></div>
+                <div class="col-sm-10">
+                    <div>
+                        <select asp-items="@lst" name="list"  class="form-select"></select>
+                    </div>
+                </div>
+            </div>
             <div class="form-group row">
                 <div class="col-sm-2"></div>
                 <div class="col-sm-10">
