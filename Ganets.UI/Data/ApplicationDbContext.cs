@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Ganets.Domain.Entities;
 
 namespace Ganets.UI.Data
 {
@@ -9,5 +10,6 @@ namespace Ganets.UI.Data
             : base(options)
         {
         }
+        public DbSet<Ganets.Domain.Entities.Gadget> Gadget { get; set; } = default!;
     }
 }

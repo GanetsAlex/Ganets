@@ -1,4 +1,5 @@
 using Ganets.UI.Data;
+using Ganets.UI.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,10 @@ var connectionString = builder.Configuration.GetConnectionString("SqLiteConnecti
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+builder.Services.AddScoped<ICategoryService, MemoryCategoryService>();
+
+builder.Services.AddScoped<IProductService, MemoryProductService>();
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => 
 { 

@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.StaticFiles;
 
 namespace Ganets.UI.Areas.Identity.Pages.Account
 {
@@ -52,6 +53,9 @@ namespace Ganets.UI.Areas.Identity.Pages.Account
         /// </summary>
         [BindProperty]
         public InputModel Input { get; set; }
+
+        [BindProperty]
+        public IFormFile? Avatar { get; set; }
 
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -98,6 +102,7 @@ namespace Ganets.UI.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
         }
 
 
@@ -117,6 +122,18 @@ namespace Ganets.UI.Areas.Identity.Pages.Account
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+
+                if (Avatar != null)
+                {
+                    user.Avatar = new byte[Avatar.Length];
+                    await Avatar
+                    .OpenReadStream()
+                    .ReadAsync(user.Avatar);
+                    var extProvider = new FileExtensionContentTypeProvider();
+                    var ext = Path.GetExtension(Avatar.FileName);
+                    user.MimeType = extProvider.Mappings[ext];
+                }
+
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
