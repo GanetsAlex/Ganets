@@ -1,5 +1,6 @@
 ﻿using Ganets.Domain.Entities.Models;
 using Ganets.Domain.Entities;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Ganets.UI.Services
 {
@@ -7,10 +8,12 @@ namespace Ganets.UI.Services
     {
             List<Gadget> _gadgets;
             List<Category> _categories;
+            IConfiguration _config;
 
-            public MemoryProductService(ICategoryService categoryService)
+        public MemoryProductService(ICategoryService categoryService, IConfiguration config)
             {
                 _categories = categoryService.GetCategoryListAsync().Result.Data;
+                _config = config;
                 SetupData();
             } 
  
@@ -48,34 +51,47 @@ namespace Ganets.UI.Services
 
         public Task<ResponseData<ListModel<Gadget>>> GetProductListAsync(string? categoryNormalizedName, int pageNo = 1)
         {
-            // Найти ID категории для фильтрации
+            // Получение ID категории для фильтрации
             int? categoryId = null;
             if (categoryNormalizedName != null)
             {
                 categoryId = _categories.FirstOrDefault(c => c.NormalizedName.Equals(categoryNormalizedName))?.Id;
             }
 
-            // Фильтровать объекты по категории
-            var filteredGadgets = _gadgets.Where(g => categoryId == null || g.CategoryId == categoryId).ToList();
+            // Фильтрация данных
+            var data = _gadgets.Where(g => categoryId == null || g.CategoryId == categoryId).ToList();
 
-            var result = new ResponseData<ListModel<Gadget>>
+            // Получение размера страницы из конфигурации
+            int pageSize = _config.GetSection("ItemsPerPage").Get<int>();
+
+            // Вычисление общего количества страниц
+            int totalPages = (int)Math.Ceiling(data.Count / (double)pageSize);
+
+            // Получение данных текущей страницы
+            var listData = new ListModel<Gadget>()
             {
-                Data = new ListModel<Gadget>
-                {
-                    Items = filteredGadgets,
-                    CurrentPage = pageNo,
-                    TotalPages = (int)Math.Ceiling(filteredGadgets.Count / 10.0)
-                }
+                Items = data.Skip((pageNo - 1) * pageSize).Take(pageSize).ToList(),
+                CurrentPage = pageNo,
+                TotalPages = totalPages
             };
 
-            if (!filteredGadgets.Any())
+            // Поместить данные в результат
+            var result = new ResponseData<ListModel<Gadget>>()
+            {
+                Data = listData
+            };
+
+            // Если список данных пуст
+            if (data.Count == 0)
             {
                 result.Success = false;
-                result.ErrorMessage = "Нет объектов в выбранной категории.";
+                result.ErrorMessage = "Нет объектов в выбранной категории";
             }
 
+            // Вернуть результат
             return Task.FromResult(result);
         }
+
 
     }
 }

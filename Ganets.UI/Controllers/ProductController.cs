@@ -14,7 +14,9 @@ namespace Ganets.UI.Controllers
             _productService = productService;
             _categoryService = categoryService;
         }
-        public async Task<IActionResult> Index(string? category)
+        [Route("Catalog")]
+        [Route("Catalog/{category}")]
+        public async Task<IActionResult> Index(string? category, int pageNo = 1)
         {
             // получить список категорий 
             var categoriesResponse = await _categoryService.GetCategoryListAsync();
@@ -33,11 +35,10 @@ namespace Ganets.UI.Controllers
         c.NormalizedName == category)?.Name;
             ViewData["currentCategory"] = currentCategory;
 
-
-            var productResponse =await _productService.GetProductListAsync(category);
+            var productResponse = await _productService.GetProductListAsync(category, pageNo);
             if (!productResponse.Success)
                 ViewData["Error"] = productResponse.ErrorMessage;
-            return View(productResponse.Data.Items);
+            return View(productResponse.Data);
         }
     }
 }
