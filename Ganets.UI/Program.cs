@@ -13,9 +13,12 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddScoped<ICategoryService, MemoryCategoryService>();
+builder.Services.AddHttpClient<IProductService, ApiProductService>(opt =>
+    opt.BaseAddress = new Uri("https://localhost:7002/api/gadgets/"));
 
-builder.Services.AddScoped<IProductService, MemoryProductService>();
+builder.Services.AddHttpClient<ICategoryService, ApiCategoryService>(opt =>
+    opt.BaseAddress = new Uri("https://localhost:7002/api/categories/"));
+
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => 
 { 

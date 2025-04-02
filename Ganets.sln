@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ganets.UI", "Ganets.UI\Gane
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ganets.Domain", "Ganets.Domain\Ganets.Domain.csproj", "{D57796F6-229E-4CC1-B56C-CAFC9BEA541C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ganets.API", "Ganets.API\Ganets.API.csproj", "{9262A8B0-D389-4719-82EA-7DBD3923D380}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{D57796F6-229E-4CC1-B56C-CAFC9BEA541C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D57796F6-229E-4CC1-B56C-CAFC9BEA541C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D57796F6-229E-4CC1-B56C-CAFC9BEA541C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9262A8B0-D389-4719-82EA-7DBD3923D380}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9262A8B0-D389-4719-82EA-7DBD3923D380}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9262A8B0-D389-4719-82EA-7DBD3923D380}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9262A8B0-D389-4719-82EA-7DBD3923D380}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
