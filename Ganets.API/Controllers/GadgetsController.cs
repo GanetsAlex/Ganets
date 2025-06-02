@@ -16,10 +16,12 @@ namespace Ganets.API.Controllers
     public class GadgetsController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly IWebHostEnvironment _env;
 
-        public GadgetsController(AppDbContext context)
+        public GadgetsController(AppDbContext context, IWebHostEnvironment env)
         {
             _context = context;
+            _env = env;
         }
 
         // GET: api/Gadgets
@@ -120,6 +122,43 @@ namespace Ganets.API.Controllers
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetGadget", new { id = gadget.Id }, gadget);
+        }
+
+        [HttpPost("{id}")]
+        public async Task<IActionResult> SaveImage(int id, IFormFile image)
+        {
+            Console.WriteLine("Метод SaveImage вызван!");
+            // Найти объект по Id 
+            var gadget = await _context.Gadgets.FindAsync(id);
+            if (gadget == null)
+            {
+                return NotFound();
+            }
+
+            // Путь к папке wwwroot/Images 
+            var imagesPath = Path.Combine(_env.WebRootPath, "Images");
+            // получить случайное имя файла 
+            var randomName = Path.GetRandomFileName();
+            // получить расширение в исходном файле 
+            var extension = Path.GetExtension(image.FileName);
+            // задать в новом имени расширение как в исходном файле 
+            var fileName = Path.ChangeExtension(randomName, extension);
+            // полный путь к файлу 
+            var filePath = Path.Combine(imagesPath, fileName);
+            // создать файл и открыть поток для записи 
+            using var stream = System.IO.File.OpenWrite(filePath);
+            // скопировать файл в поток 
+            await image.CopyToAsync(stream);
+            // получить Url хоста 
+            var host = "https://" + Request.Host;
+            // Url файла изображения 
+            var url = $"{host}/Images/{fileName}";
+            // Сохранить url файла в объекте 
+            gadget.Image = url;
+            Console.WriteLine($"Сохраненный URL: {url}");
+            await _context.SaveChangesAsync();
+            _context.Entry(gadget).Reload();
+            return Ok();
         }
 
         // DELETE: api/Gadgets/5

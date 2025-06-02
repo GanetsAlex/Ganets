@@ -40,7 +40,6 @@ namespace Ganets.UI.Services
     //    /// <param name="gadget">Новый объект</param> 
     //    /// <param name="formFile">Файл изображения</param> 
     //    /// <returns>Созданный объект</returns> 
-    //    public Task<ResponseData<Gadget>> CreateProductAsync(Gadget productt, IFormFile?
-    //formFile);
+    public Task<ResponseData<Gadget>> CreateProductAsync(Gadget productt, IFormFile?formFile);
     }
 }

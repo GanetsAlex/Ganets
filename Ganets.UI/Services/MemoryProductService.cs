@@ -92,7 +92,10 @@ namespace Ganets.UI.Services
             return Task.FromResult(result);
         }
 
-
+        public Task<ResponseData<Gadget>> CreateProductAsync(Gadget productt, IFormFile? formFile)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
 

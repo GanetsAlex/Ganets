@@ -19,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Ganets.API\Ganets.API.csproj" />
     <ProjectReference Include="..\Ganets.Domain\Ganets.Domain.csproj" />
   </ItemGroup>
 
