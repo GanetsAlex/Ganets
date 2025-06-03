@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ganets.Domain", "Ganets.Dom
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ganets.API", "Ganets.API\Ganets.API.csproj", "{9262A8B0-D389-4719-82EA-7DBD3923D380}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ganets.Blazor", "Ganets.Blazor\Ganets.Blazor.csproj", "{4EE744CC-1948-4B06-83D9-73CE1B91FD7F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{9262A8B0-D389-4719-82EA-7DBD3923D380}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9262A8B0-D389-4719-82EA-7DBD3923D380}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9262A8B0-D389-4719-82EA-7DBD3923D380}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4EE744CC-1948-4B06-83D9-73CE1B91FD7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EE744CC-1948-4B06-83D9-73CE1B91FD7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EE744CC-1948-4B06-83D9-73CE1B91FD7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EE744CC-1948-4B06-83D9-73CE1B91FD7F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

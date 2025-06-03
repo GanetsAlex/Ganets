@@ -1,0 +1,55 @@
+﻿@implements IDisposable
+@rendermode InteractiveServer
+
+<h3>Гаджеты</h3>
+
+@if (ProductService.Products != null && ProductService.Products.Any())
+{
+    <table class="table table-striped">
+        <thead>
+        <th>Название</th>
+        <th></th>
+        </thead>
+        <tbody>
+            @foreach (var item in ProductService.Products)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>
+                        <button class="btn btn-outline-dark"
+                                @onclick="@(() => OnGadgetSelected(item.Id))">
+                            Подробно
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Данные загружаются...</p>
+}
+
+@code {
+    [CascadingParameter]
+    public IProductService<Gadget> ProductService { get; set; }
+
+    [Parameter]
+    public EventCallback<int> GadgetSelected { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        ProductService.ListChanged += StateHasChanged;
+    }
+
+    public async void OnGadgetSelected(int id)
+    {
+        await GadgetSelected.InvokeAsync(id);
+    }
+
+    public void Dispose()
+    {
+        ProductService.ListChanged -= StateHasChanged;
+    }
+}

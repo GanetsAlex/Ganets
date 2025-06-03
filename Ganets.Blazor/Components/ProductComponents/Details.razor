@@ -1,0 +1,16 @@
+﻿@if (Gadget != null)
+{
+    <div class="card mt-5" style="width: 18rem;">
+        <img src="@Gadget.Image" class="card-img-top" alt="...">
+        <div class="card-body">
+            <h5 class="card-title">@Gadget.Name</h5>
+            <p class="card-text">@Gadget.Description</p>
+            <h4 class="badge bg-info">@Gadget.Price $</h4>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public Gadget Gadget { get; set; }
+}

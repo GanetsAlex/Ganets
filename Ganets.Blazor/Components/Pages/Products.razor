@@ -1,0 +1,24 @@
+﻿@page "/products"
+@using Ganets.Blazor.Components.ProductComponents
+@rendermode InteractiveServer
+
+<CascadingValue Value="ProductService">
+    <List GadgetSelected="ShowDetails" />
+    <Pager />
+</CascadingValue>
+<Details Gadget="SelectedGadget" />
+
+@code {
+    [Inject] IProductService<Gadget> ProductService { get; set; }       
+    public Gadget SelectedGadget { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await ProductService.GetProducts();
+    }     
+
+    void ShowDetails(int id)
+    {
+        SelectedGadget = ProductService.Products.First(g => g.Id == id);
+    }
+}
