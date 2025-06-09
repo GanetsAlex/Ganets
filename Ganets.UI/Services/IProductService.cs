@@ -9,8 +9,8 @@ namespace Ganets.UI.Services
         /// Получение списка всех объектов 
         /// </summary> 
         /// <param name="categoryNormalizedName">нормализованное имя категории для фильтрации</param>
-    /// <param name="pageNo">номер страницы списка</param> 
-    /// <returns></returns> 
+        /// <param name="pageNo">номер страницы списка</param> 
+        /// <returns></returns> 
     public Task<ResponseData<ListModel<Gadget>>> GetProductListAsync(string?categoryNormalizedName, int pageNo = 1);
 
     //    /// <summary> 
@@ -18,7 +18,7 @@ namespace Ganets.UI.Services
     //    /// </summary> 
     //    /// <param name="id">Идентификатор объекта</param> 
     //    /// <returns>Найденный объект или null, если объект не найден</returns> 
-    //    public Task<ResponseData<Gadget>> GetProductByIdAsync(int id);
+    public Task<ResponseData<Gadget>> GetProductByIdAsync(int id);
 
     //    /// <summary> 
     //    /// Обновление объекта 
@@ -27,13 +27,13 @@ namespace Ganets.UI.Services
     //    /// <param name="gadget">объект с новыми параметрами</param> 
     //    /// <param name="formFile">Файл изображения</param> 
     //    /// <returns></returns> 
-    //    public Task UpdateProductAsync(int id, Gadget product, IFormFile? formFile);
+    public Task UpdateProductAsync(int id, Gadget product, IFormFile? formFile);
     //    /// <summary> 
     //    /// Удаление объекта 
     //    /// </summary> 
     //    /// <param name="id">Id удаляемомго объекта</param> 
     //    /// <returns></returns> 
-    //    public Task DeleteProductAsync(int id);
+     public Task DeleteProductAsync(int id);
     //    /// <summary> 
     //    /// Создание объекта 
     //    /// </summary> 
@@ -41,5 +41,6 @@ namespace Ganets.UI.Services
     //    /// <param name="formFile">Файл изображения</param> 
     //    /// <returns>Созданный объект</returns> 
     public Task<ResponseData<Gadget>> CreateProductAsync(Gadget productt, IFormFile?formFile);
+
     }
 }

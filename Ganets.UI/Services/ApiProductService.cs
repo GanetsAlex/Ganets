@@ -40,7 +40,7 @@ namespace Ganets.UI.Services
             return response;
         }
 
-        public async Task<ResponseData<Gadget>> CreateProductAsync(Gadget product, IFormFile?formFile)
+        public async Task<ResponseData<Gadget>> CreateProductAsync(Gadget product, IFormFile? formFile)
         {
             var serializerOptions = new JsonSerializerOptions()
             {
@@ -57,8 +57,8 @@ namespace Ganets.UI.Services
             if (!response.IsSuccessStatusCode)
             {
                 responseData.Success = false;
-                responseData.ErrorMessage = $"Не удалось создать объект: { response.StatusCode}"; 
-                return responseData;            
+                responseData.ErrorMessage = $"Не удалось создать объект: {response.StatusCode}";
+                return responseData;
             }
             // Если файл изображения передан клиентом 
             if (formFile != null)
@@ -69,7 +69,7 @@ namespace Ganets.UI.Services
                 var request = new HttpRequestMessage
                 {
                     Method = HttpMethod.Post,
-                    RequestUri = new Uri($"{httpClient.BaseAddress.AbsoluteUri}/{gadget.Id}")
+                    RequestUri = new Uri($"{httpClient.BaseAddress.AbsoluteUri}{gadget.Id}")
                 };
 
                 // Создать контент типа multipart form-data 
@@ -86,10 +86,78 @@ namespace Ganets.UI.Services
                 if (!response.IsSuccessStatusCode)
                 {
                     responseData.Success = false;
-                    responseData.ErrorMessage = $"Не удалось сохранить изображение: { response.StatusCode}"; 
+                    responseData.ErrorMessage = $"Не удалось сохранить изображение: {response.StatusCode}";
                 }
             }
             return responseData;
+        }
+
+        public async Task DeleteProductAsync(int id)
+        {
+            await httpClient.DeleteAsync($"{httpClient.BaseAddress}{id}");
+        }
+
+        public async Task<ResponseData<Gadget>> GetProductByIdAsync(int id)
+        {
+            var responseData = new ResponseData<Gadget>();
+
+            // Отправка запроса к API
+            var response = await httpClient.GetAsync($"{httpClient.BaseAddress}{id}");
+
+            // Проверка кода ответа
+            if (!response.IsSuccessStatusCode)
+            {
+                responseData.Success = false;
+                responseData.ErrorMessage = $"Ошибка при получении объекта: {response.StatusCode}";
+                return responseData;
+            }
+
+            // Чтение объекта из тела ответа
+            var petFood = await response.Content.ReadFromJsonAsync<Gadget>();
+            if (petFood == null)
+            {
+                responseData.Success = false;
+                responseData.ErrorMessage = "Объект не найден";
+                return responseData;
+            }
+
+            // Возврат результата
+            responseData.Data = petFood;
+            return responseData;
+        }
+        public async Task UpdateProductAsync(int id, Gadget product, IFormFile? formFile)
+        {
+            // Сначала отправим PUT-запрос для обновления объекта
+            var uri = new Uri(httpClient.BaseAddress!, $"{id}");
+            var putResponse = await httpClient.PutAsJsonAsync(uri, product);
+
+            if (!putResponse.IsSuccessStatusCode)
+            {
+                throw new Exception($"Ошибка при обновлении объекта: {putResponse.StatusCode}");
+            }
+
+            // Если передано новое изображение — отправим его отдельно
+            if (formFile != null)
+            {
+                var request = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Post,
+                    RequestUri = new Uri($"{httpClient.BaseAddress}{id}")
+                };
+
+                var content = new MultipartFormDataContent();
+                var streamContent = new StreamContent(formFile.OpenReadStream());
+
+                content.Add(streamContent, "image", formFile.FileName);
+                request.Content = content;
+
+                var imageResponse = await httpClient.SendAsync(request);
+
+                if (!imageResponse.IsSuccessStatusCode)
+                {
+                    throw new Exception($"Ошибка при загрузке изображения: {imageResponse.StatusCode}");
+                }
+            }
         }
     }
 }

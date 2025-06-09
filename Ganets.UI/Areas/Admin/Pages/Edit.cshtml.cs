@@ -5,74 +5,51 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using Ganets.Domain.Entities;
-using Ganets.UI.Data;
+using Ganets.UI.Services;
+using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace Ganets.UI.Areas.Admin.Pages
 {
     public class EditModel : PageModel
     {
-        private readonly Ganets.UI.Data.DataDbContext _context;
+        private readonly ICategoryService _categoryService;
+        private readonly IProductService _productService;
 
-        public EditModel(Ganets.UI.Data.DataDbContext context)
+        public EditModel(ICategoryService categoryService, IProductService productService)
         {
-            _context = context;
+            _categoryService = categoryService;
+            _productService = productService;
         }
 
         [BindProperty]
-        public Gadget Gadget { get; set; } = default!;
+        public Gadget gadget { get; set; } = default!;
+
+        [BindProperty]
+        public IFormFile? Image { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var gadget =  await _context.Gadgets.FirstOrDefaultAsync(m => m.Id == id);
-            if (gadget == null)
-            {
-                return NotFound();
-            }
-            Gadget = gadget;
-           ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
+            var result = await _productService.GetProductByIdAsync(id.Value);
+            if (!result.Success || result.Data == null) return NotFound();
+
+            gadget = result.Data;
+
+            var categories = await _categoryService.GetCategoryListAsync();
+            ViewData["CategoryId"] = new SelectList(categories.Data, "Id", "Name");
+
             return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
+            if (!ModelState.IsValid) return Page();
 
-            _context.Attach(Gadget).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!GadgetExists(Gadget.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
+            await _productService.UpdateProductAsync(gadget.Id, gadget, Image);
             return RedirectToPage("./Index");
-        }
-
-        private bool GadgetExists(int id)
-        {
-            return _context.Gadgets.Any(e => e.Id == id);
         }
     }
 }

@@ -161,7 +161,46 @@ namespace Ganets.API.Controllers
             return Ok();
         }
 
-        // DELETE: api/Gadgets/5
+
+        [HttpPost("UpdateImage/{id}")]
+        public async Task<IActionResult> UpdateImage(int id, IFormFile image)
+        {
+            var gadget = await _context.Gadgets.FindAsync(id);
+            if (gadget == null)
+            {
+                return NotFound();
+            }
+
+            // Получить путь к папке wwwroot/Images
+            var imagesPath = Path.Combine(_env.WebRootPath, "Images");
+
+            // Удалить старое изображение
+            if (!string.IsNullOrEmpty(gadget.Image))
+            {
+                var oldImagePath = Path.Combine(imagesPath, Path.GetFileName(gadget.Image));
+                if (System.IO.File.Exists(oldImagePath))
+                {
+                    System.IO.File.Delete(oldImagePath);
+                }
+            }
+
+            // Создать новое изображение
+            var randomName = Path.GetRandomFileName();
+            var extension = Path.GetExtension(image.FileName);
+            var fileName = Path.ChangeExtension(randomName, extension);
+            var filePath = Path.Combine(imagesPath, fileName);
+
+            using var stream = System.IO.File.OpenWrite(filePath);
+            await image.CopyToAsync(stream);
+
+            // Сохранить новый URL изображения
+            var host = "https://" + Request.Host;
+            gadget.Image = $"{host}/Images/{fileName}";
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteGadget(int id)
         {
@@ -171,11 +210,22 @@ namespace Ganets.API.Controllers
                 return NotFound();
             }
 
+            // Удалить изображение гаджета
+            if (!string.IsNullOrEmpty(gadget.Image))
+            {
+                var imagePath = Path.Combine(_env.WebRootPath, "Images", Path.GetFileName(gadget.Image));
+                if (System.IO.File.Exists(imagePath))
+                {
+                    System.IO.File.Delete(imagePath);
+                }
+            }
+
             _context.Gadgets.Remove(gadget);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
+
 
         private bool GadgetExists(int id)
         {

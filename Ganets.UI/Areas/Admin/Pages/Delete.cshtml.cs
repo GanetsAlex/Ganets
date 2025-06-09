@@ -7,56 +7,29 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ganets.Domain.Entities;
 using Ganets.UI.Data;
+using Ganets.UI.Services;
 
 namespace Ganets.UI.Areas.Admin.Pages
 {
-    public class DeleteModel : PageModel
+    public class DeleteModel(IProductService productService) : PageModel
     {
-        private readonly Ganets.UI.Data.DataDbContext _context;
+        public Gadget gadget { get; set; } = default!;
 
-        public DeleteModel(Ganets.UI.Data.DataDbContext context)
+        public async Task<IActionResult> OnGetAsync(int id)
         {
-            _context = context;
-        }
-
-        [BindProperty]
-        public Gadget Gadget { get; set; } = default!;
-
-        public async Task<IActionResult> OnGetAsync(int? id)
-        {
-            if (id == null)
+            var result = await productService.GetProductByIdAsync(id);
+            if (!result.Success || result.Data is null)
             {
-                return NotFound();
+                return RedirectToPage("./Index");
             }
 
-            var gadget = await _context.Gadgets.FirstOrDefaultAsync(m => m.Id == id);
-
-            if (gadget == null)
-            {
-                return NotFound();
-            }
-            else
-            {
-                Gadget = gadget;
-            }
+            gadget = result.Data;
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(int? id)
+        public async Task<IActionResult> OnPostAsync(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var gadget = await _context.Gadgets.FindAsync(id);
-            if (gadget != null)
-            {
-                Gadget = gadget;
-                _context.Gadgets.Remove(Gadget);
-                await _context.SaveChangesAsync();
-            }
-
+            await productService.DeleteProductAsync(id);
             return RedirectToPage("./Index");
         }
     }

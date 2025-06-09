@@ -96,6 +96,18 @@ namespace Ganets.UI.Services
         {
             throw new NotImplementedException();
         }
+        public Task DeleteProductAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+        public Task<ResponseData<Gadget>> GetProductByIdAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+        public Task UpdateProductAsync(int id, Gadget product, IFormFile? formFile)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
 

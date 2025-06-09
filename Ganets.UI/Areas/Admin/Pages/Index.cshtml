@@ -2,36 +2,25 @@
 @model Ganets.UI.Areas.Admin.Pages.IndexModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Админка";
 }
 
-<h1>Index</h1>
+<h1>Админка</h1>
 
 <p>
     <a asp-page="Create" class="btn btn-primary">
-        <i class="fa-solid fa-plus"></i> Create New
+        <i class="fa-solid fa-plus"></i> Добавить
     </a>
 </p>
 <table class="table">
     <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Gadget[0].Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Gadget[0].Price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Gadget[0].Image)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Gadget[0].Category)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Gadget[0].Name)
-            </th>
-            <th></th>
-        </tr>
+       <tr> 
+           <th> @Html.DisplayNameFor(model => model.Gadget[0].Description)</th> 
+           <th> @Html.DisplayNameFor(model => model.Gadget[0].Price)</th> 
+           <th> @Html.DisplayNameFor(model => model.Gadget[0].Image)</th>
+           <th> @Html.DisplayNameFor(model => model.Gadget[0].Name)</th>
+       <th></th>
+       </tr>
     </thead>
     <tbody>
 @foreach (var item in Model.Gadget) {
@@ -46,17 +35,17 @@
                <img src="@item.Image" width="200" />
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Category.Name)
+                @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td> 
                     <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn success">
-                        <i class="fa-solid fa-pen-to-square"></i> Edit
+                        <i class="fa-solid fa-pen-to-square"></i> Изменить
                     </a>
                     <a asp-page="./Details" asp-route-id="@item.Id" class="btn btn info ms-1 me-1">
-                        <i class="fa-solid fa-info"></i> Details
+                        <i class="fa-solid fa-info"></i> Подробно
                     </a>
                     <a asp-page="./Delete" asp-route-id="@item.Id" class="btn btn danger">
-                        <i class="fa-regular fa-trash-can"></i> Delete
+                        <i class="fa-regular fa-trash-can"></i> Удалить
                     </a>
             </td>
         </tr>

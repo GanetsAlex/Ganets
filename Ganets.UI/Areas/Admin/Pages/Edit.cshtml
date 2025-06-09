@@ -2,51 +2,65 @@
 @model Ganets.UI.Areas.Admin.Pages.EditModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Редактирование товара";
 }
 
-<h1>Edit</h1>
+<div class="container mt-4 mb-5">
+    <div class="card shadow-sm mx-auto" style="max-width: 600px;">
+        <div class="card-body">
+            <h4 class="card-title mb-4">Редактирование товара</h4>
 
-<h4>Gadget</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Gadget.Description" class="control-label"></label>
-                <input asp-for="Gadget.Description" class="form-control" />
-                <span asp-validation-for="Gadget.Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Gadget.Price" class="control-label"></label>
-                <input asp-for="Gadget.Price" class="form-control" />
-                <span asp-validation-for="Gadget.Price" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Gadget.Image" class="control-label"></label>
-                <input asp-for="Gadget.Image" class="form-control" />
-                <span asp-validation-for="Gadget.Image" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Gadget.CategoryId" class="control-label"></label>
-                <select asp-for="Gadget.CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
-                <span asp-validation-for="Gadget.CategoryId" class="text-danger"></span>
-            </div>
-            <input type="hidden" asp-for="Gadget.Id" />
-            <div class="form-group">
-                <label asp-for="Gadget.Name" class="control-label"></label>
-                <input asp-for="Gadget.Name" class="form-control" />
-                <span asp-validation-for="Gadget.Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+            <form method="post" enctype="multipart/form-data">
+                <input type="hidden" asp-for="gadget.Id" />
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <div class="mb-3">
+                    <label asp-for="gadget.Name" class="form-label">Название</label>
+                    <input asp-for="gadget.Name" class="form-control" />
+                    <span asp-validation-for="gadget.Name" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="gadget.Description" class="form-label">Описание</label>
+                    <input asp-for="gadget.Description" class="form-control" />
+                    <span asp-validation-for="gadget.Description" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="gadget.Price" class="form-label">Цена (BYR)</label>
+                    <input asp-for="gadget.Price" type="number" class="form-control" />
+                    <span asp-validation-for="gadget.Price" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="gadget.CategoryId" class="form-label">Категория</label>
+                    <select asp-for="gadget.CategoryId" class="form-select" asp-items="ViewBag.CategoryId"></select>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Image" class="form-label">Изображение</label>
+                    <input asp-for="Image" type="file" class="form-control" />
+                </div>
+
+                @if (!string.IsNullOrEmpty(Model.gadget.Image))
+                {
+                        <div class="mb-4">
+                            <label class="form-label">Текущее изображение:</label><br />
+                            <img src="@Model.gadget.Image" alt="Preview" class="img-thumbnail" style="max-height: 200px;" />
+                        </div>
+                }
+
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                    <a asp-page="Index" class="btn btn-secondary">Отменить</a>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-page="./Index">Back to List</a>
-</div>
-
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
