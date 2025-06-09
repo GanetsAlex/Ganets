@@ -1,9 +1,16 @@
 using Ganets.UI.Data;
+using Ganets.UI.Middleware;
 using Ganets.UI.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 using System.Security.Claims;
+
+Log.Logger = new LoggerConfiguration()
+.WriteTo.Console()
+.WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Day)
+.CreateLogger();
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +26,8 @@ builder.Services.AddHttpClient<IProductService, ApiProductService>(opt =>
 builder.Services.AddHttpClient<ICategoryService, ApiCategoryService>(opt =>
     opt.BaseAddress = new Uri("https://localhost:7002/api/categories/"));
 
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession();
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => 
 { 
@@ -55,6 +64,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseSession();
+app.UseMiddleware<FileLogger>();
 
 app.UseAuthorization();
 

@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ganets.API", "Ganets.API\Ga
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ganets.Blazor", "Ganets.Blazor\Ganets.Blazor.csproj", "{4EE744CC-1948-4B06-83D9-73CE1B91FD7F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ganets.Tests", "Ganets.Tests\Ganets.Tests.csproj", "{48F686CA-372D-4104-A1B7-94E69EE1E105}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{4EE744CC-1948-4B06-83D9-73CE1B91FD7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4EE744CC-1948-4B06-83D9-73CE1B91FD7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4EE744CC-1948-4B06-83D9-73CE1B91FD7F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48F686CA-372D-4104-A1B7-94E69EE1E105}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48F686CA-372D-4104-A1B7-94E69EE1E105}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48F686CA-372D-4104-A1B7-94E69EE1E105}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48F686CA-372D-4104-A1B7-94E69EE1E105}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

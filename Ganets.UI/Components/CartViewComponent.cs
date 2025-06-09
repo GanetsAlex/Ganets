@@ -1,12 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Ganets.Domain.Entities;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Ganets.UI.Components
 {
-    public class CartViewComponent: ViewComponent
+    public class CartViewComponent : ViewComponent
     {
         public IViewComponentResult Invoke()
         {
-            return View();
+            var cart = HttpContext.Session.Get<Cart>("cart");
+            return View(cart);
         }
     }
+
 }

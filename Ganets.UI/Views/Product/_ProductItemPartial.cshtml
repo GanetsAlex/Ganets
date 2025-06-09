@@ -12,7 +12,8 @@
             <a class="btn btn-outline-primary"
                asp-action="Add"
                asp-controller="Cart"
-               asp-route-id="@Model.Id">
+               asp-route-id="@Model.Id"
+               asp-route-returnUrl="@Context.Request.Path">
                <i class="fa-solid fa-cart-shopping"></i>
                Добавить в корзину
             </a>

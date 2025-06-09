@@ -1,3 +1,7 @@
-﻿<a asp-controller="Cart" asp-action="Index" class="navbar-text ms-auto"> 
-    00,0 руб <i class="fa-solid fa-cart-shopping"></i> (0) 
+﻿@using Ganets.Domain
+@model Cart 
+
+<a asp-action="Index" asp-controller="Cart" class="navbar-text ms-auto"> 
+    @Model.TotalPrice BYR <i class="fa-solid fa-cart-shopping"></i> 
+(@Model.Count) 
 </a> 
